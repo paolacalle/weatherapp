@@ -29,6 +29,7 @@ def home():
     #we call render_template instead of returning raw HTML -- this is where we point 
     #corresponding template .html file and 
     #pass the missing info 
+    
     return render_template('home.html', subtitle='Welcome to Weather App.', text='This is the home page')
 
 @app.route("/register", methods=['GET', 'POST'])

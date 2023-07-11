@@ -7,9 +7,6 @@ class loginForm(FlaskForm):
     username = StringField('Username',
                            validators=[DataRequired(), Length(min=2, max=20)]) #min 2 and max 20 chars
     
-    email = StringField('Email',
-                        validators=[DataRequired(), Email()]) #Email has a special vaildator 
-    
     password = PasswordField('Password', validators=[DataRequired()])
     
     submit = SubmitField('Login') #button that says Sign Up for submitting form 
