@@ -19,9 +19,15 @@
       <section class="weather-part">
         <img src="" alt="Weather Icon">
         <div class="temp">
-          <span class="numb">_</span>
-          <span class="deg">°</span>C
+          <span class="numb-c">_</span>
+          <span class="deg">°</span>C 
         </div>
+
+        <div class="temp">
+          <span class="numb-f">_</span>
+          <span class="deg">°</span>F
+        </div>
+
         <div class="weather">_ _</div>
         <div class="location">
           <i class='bx bx-map'></i>
@@ -32,8 +38,12 @@
             <i class='bx bxs-thermometer'></i>
             <div class="details">
               <div class="temp">
-                <span class="numb-2">_</span>
+                <span class="numb-2-c">_</span>
                 <span class="deg">°</span>C
+              </div>
+              <div class="temp">
+                <span class="numb-2-f">_</span>
+                <span class="deg">°</span>F
               </div>
               <p>Feels like</p>
             </div>
@@ -110,6 +120,7 @@
                 const {description, id} = info.weather[0];
                 const {temp, feels_like, humidity} = info.main;
 
+
                 if(id == 800){
                     wIcon.src = "icons/clear.svg";
                 }else if(id >= 200 && id <= 232){
@@ -124,10 +135,20 @@
                     wIcon.src = "icons/rain.svg";
                 }
                 
-                weatherPart.querySelector(".temp .numb").innerText = Math.floor(temp);
+                if (temp >= 140) {
+                  weatherPart.querySelector(".temp .numb-c").innerText = Math.floor(temp - 273.15);
+                  weatherPart.querySelector(".temp .numb-f").innerText = Math.floor(((temp - 273.15) * 9/5) + 32);
+                  weatherPart.querySelector(".temp .numb-2-c").innerText = Math.floor(feels_like - 273.15);
+                  weatherPart.querySelector(".temp .numb-2-f").innerText = Math.floor(((feels_like - 273.15) * 9/5) + 32);
+                } else {
+                  weatherPart.querySelector(".temp .numb-c").innerText = Math.floor(temp);
+                  weatherPart.querySelector(".temp .numb-f").innerText = Math.floor((temp * 9/5) + 32);
+                  weatherPart.querySelector(".temp .numb-2-c").innerText = Math.floor(feels_like);
+                  weatherPart.querySelector(".temp .numb-2-f").innerText = Math.floor((feels_like * 9/5) + 32);
+                }
+
                 weatherPart.querySelector(".weather").innerText = description;
                 weatherPart.querySelector(".location span").innerText = `${city}, ${country}`;
-                weatherPart.querySelector(".temp .numb-2").innerText = Math.floor(feels_like);
                 weatherPart.querySelector(".humidity span").innerText = `${humidity}%`;
                 infoTxt.classList.remove("pending", "error");
                 infoTxt.innerText = "";
