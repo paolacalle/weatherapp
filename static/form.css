@@ -6,6 +6,7 @@
 
 .form-control-label {
   font-weight: bold;
+  color: #444444;
 }
 
 .form-control {
@@ -14,6 +15,8 @@
   font-size: 16px;
   border: 1px solid #ccc;
   border-radius: 4px;
+  background-color: #f9f9f9;
+  color: #333333;
 }
 
 .invalid-feedback {
@@ -27,6 +30,7 @@
   border-radius: 4px;
   background-color: #337ab7;
   color: white;
+  cursor: pointer;
 }
 
 .btn-outline-info {
@@ -39,3 +43,18 @@
   background-color: #5bc0de;
   color: white;
 }
+
+/* Additional unique styles */
+.form-group .form-control-label {
+  margin-bottom: 10px;
+}
+
+.form-control:focus {
+  border-color: #43affc;
+  box-shadow: 0 0 0 0.2rem rgba(67, 175, 252, 0.25);
+}
+
+.btn:hover {
+  background-color: #1d9ffc;
+}
+

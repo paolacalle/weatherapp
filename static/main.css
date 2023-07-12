@@ -8,14 +8,14 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 img {
-    padding: 5% 5%;
+  padding: 5% 5%;
 }
 
 .center {
-    display: block;
-    margin-left: auto;
-    margin-right: auto;
-    width: 50%;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  width: 50%;
 }
 
 .bg-steel {
@@ -33,6 +33,39 @@ img {
 
 .site-header .navbar-nav .nav-link.active {
   font-weight: 800;
+}
+
+.navbar-weather {
+  background-color: #2459bb;
+  padding: 1% 1%;
+}
+
+.navbar-weather .navbar-brand {
+  color: #ffffff;
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+
+.navbar-weather .navbar-brand:hover {
+  color: #cbd5db;
+}
+
+.navbar-weather .navbar-toggler {
+  border-color: #ffffff;
+}
+
+.navbar-weather .navbar-toggler-icon {
+  background-image: url('weather-icon.png');
+  width: 20px;
+  height: 20px;
+}
+
+.navbar-weather .navbar-nav .nav-link {
+  color: #ffffff;
+}
+
+.navbar-weather .navbar-nav .nav-link:hover {
+  color: #cbd5db;
 }
 
 .content-section {

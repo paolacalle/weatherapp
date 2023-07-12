@@ -4,6 +4,7 @@ from forms import RegistrationForm, loginForm
 from flask_behind_proxy import FlaskBehindProxy
 from flask_sqlalchemy import SQLAlchemy
 
+
 app = Flask(__name__)
 proxied = FlaskBehindProxy(app)  #to handle redirect in codio 
 
