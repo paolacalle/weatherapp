@@ -19,6 +19,7 @@ create_table_query = '''
 cursor.execute(create_table_query)
 connection.close()
 
+
 app = Flask(__name__)
 proxied = FlaskBehindProxy(app)  #to handle redirect in codio 
 
