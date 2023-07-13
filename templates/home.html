@@ -4,8 +4,8 @@
 <!DOCTYPE html>
 
     <div class="wrapper center">
-      <header><i class='bx bx-left-arrow-alt'></i>Get Your Weather</header>
       <section class="input-part">
+        <header>Enter info:</header>
         <p class="info-txt"></p>
         <div class="content">
           <input type="text" spellcheck="false" placeholder="Enter city name" required>
@@ -14,6 +14,7 @@
         </div>
       </section>
       <section class="weather-part">
+        <header><i class='bx bx-left-arrow-alt'></i>Go Back</header>
         <img src="" alt="Weather Icon">
         <div class="temp">
           <span class="numb-c">_</span>
@@ -78,7 +79,7 @@
             if(navigator.geolocation){
                 navigator.geolocation.getCurrentPosition(onSuccess, onError);
             }else{
-                alert("Your browser not support geolocation api");
+                alert("Sorry, your browser does not allow geolocation api.");
             }
         });
 

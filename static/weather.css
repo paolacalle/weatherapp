@@ -49,7 +49,6 @@ body {
 header i {
   font-size: 1.5rem;
   cursor: pointer;
-  margin-right: 0.5rem;
 }
 
 .wrapper.active header i {
