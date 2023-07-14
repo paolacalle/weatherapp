@@ -1,61 +1,60 @@
 {% extends "layout.html" %} <!-- Inherits the basic layout from layout.html -->
 {% block content %}
 
-<!DOCTYPE html>
 
-    <div class="wrapper center">
-      <section class="input-part">
-        <header>Enter info:</header>
-        <p class="info-txt"></p>
-        <div class="content">
-          <input type="text" spellcheck="false" placeholder="Enter city name" required>
-          <div class="separator"></div>
-          <button>Get Location Automatically</button>
-        </div>
-      </section>
-      <section class="weather-part">
-        <header><i class='bx bx-left-arrow-alt'></i>Go Back</header>
-        <img src="" alt="Weather Icon">
-        <div class="temp">
-          <span class="numb-c">_</span>
-          <span class="deg">°</span>C 
-        </div>
+  <div class="wrapper center">
+    <section class="input-part">
+      <header>Enter info:</header>
+      <p class="info-txt"></p>
+      <div class="content">
+        <input type="text" spellcheck="false" placeholder="Enter city name" required>
+        <div class="separator"></div>
+        <button>Get Location Automatically</button>
+      </div>
+    </section>
+    <section class="weather-part">
+      <header><i class='bx bx-left-arrow-alt'></i>Go Back</header>
+      <img src="" alt="Weather Icon">
+      <div class="temp">
+        <span class="numb-c">_</span>
+        <span class="deg">°</span>C 
+      </div>
 
-        <div class="temp">
-          <span class="numb-f">_</span>
-          <span class="deg">°</span>F
-        </div>
+      <div class="temp">
+        <span class="numb-f">_</span>
+        <span class="deg">°</span>F
+      </div>
 
-        <div class="weather">_ _</div>
-        <div class="location">
-          <i class='bx bx-map'></i>
-          <span>_, _</span>
-        </div>
-        <div class="bottom-details">
-          <div class="column feels">
-            <i class='bx bxs-thermometer'></i>
-            <div class="details">
-              <div class="temp">
-                <span class="numb-2-c">_</span>
-                <span class="deg">°</span>C
-              </div>
-              <div class="temp">
-                <span class="numb-2-f">_</span>
-                <span class="deg">°</span>F
-              </div>
-              <p>Feels like</p>
+      <div class="weather">_ _</div>
+      <div class="location">
+        <i class='bx bx-map'></i>
+        <span>_, _</span>
+      </div>
+      <div class="bottom-details">
+        <div class="column feels">
+          <i class='bx bxs-thermometer'></i>
+          <div class="details">
+            <div class="temp">
+              <span class="numb-2-c">_</span>
+              <span class="deg">°</span>C
             </div>
-          </div>
-          <div class="column humidity">
-            <i class='bx bxs-droplet-half'></i>
-            <div class="details">
-              <span>_</span>
-              <p>Humidity</p>
+            <div class="temp">
+              <span class="numb-2-f">_</span>
+              <span class="deg">°</span>F
             </div>
+            <p>Feels like</p>
           </div>
         </div>
-      </section>
-    </div>
+        <div class="column humidity">
+          <i class='bx bxs-droplet-half'></i>
+          <div class="details">
+            <span>_</span>
+            <p>Humidity</p>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
     
     <script> 
         const wrapper = document.querySelector(".wrapper"),
