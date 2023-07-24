@@ -3,6 +3,7 @@ from flask import Flask, render_template, url_for, flash, redirect, request
 from forms import RegistrationForm, loginForm
 from flask_behind_proxy import FlaskBehindProxy
 import sqlite3
+import bcrypt
 
 connection = sqlite3.connect('database.db')
 cursor = connection.cursor()
@@ -60,7 +61,8 @@ def register():
         username = form.username.data
         email = form.email.data
         password = form.password.data
-        cursor.execute(insert_query, (username, email, password))
+        hashed_password = hash_password(password)
+        cursor.execute(insert_query, (username, email, hashed_password))
         connection.commit()
         # Close the connection
         connection.close()
@@ -84,7 +86,9 @@ def login():
         user = cursor.fetchone()
 
         # Check if a user with the provided username exists and if the password matches
-        if user and user[3] == form.password.data:  # Assuming password is stored in the fourth column (index 3)
+        login_password = form.password.data
+        hashed_password = user[3]
+        if user and verify_password(hashed_password, login_password):  # Assuming password is stored in the fourth column (index 3)
             flash('Login successful!', 'success')
             connection.close()
             return redirect(url_for('home'))
@@ -93,6 +97,16 @@ def login():
         connection.close()
         return redirect(url_for('login'))
     return render_template('login.html', title='Login', form=form)
+
+def hash_password(password):
+    # Generate a random salt and hash the password
+    salt = bcrypt.gensalt()
+    hashed_password = bcrypt.hashpw(password.encode('utf-8'), salt)
+    return hashed_password.decode('utf-8')
+
+def verify_password(hashed_password, password):
+    # Verify the entered password against the stored hash
+    return bcrypt.checkpw(password.encode('utf-8'), hashed_password.encode('utf-8'))
 
 if __name__ == '__main__':
     app.run(debug=True, host="0.0.0.0")
