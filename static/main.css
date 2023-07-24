@@ -57,7 +57,6 @@ img {
 }
 
 .navbar-weather .navbar-toggler-icon {
-  background-image: url('weather-icon.png');
   width: 20px;
   height: 20px;
 }

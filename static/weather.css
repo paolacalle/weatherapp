@@ -13,12 +13,13 @@ h1 {
   font-family: 'Poppins', sans-serif;
 }
 
+
 body {
   display: flex;
   align-items: center;
   justify-content: center;
   min-height: 100vh;
-  background: linear-gradient(to bottom, #007bff, #43affc);
+  background: linear-gradient(to bottom, #007bff, #658daa8e);
 }
 
 ::selection {
@@ -136,7 +137,22 @@ header i {
   transition: 0.3s ease;
 }
 
+.weather-part button {
+  margin: 4%;
+  text-align: center;
+  padding: 0 1rem;
+  border: 1px solid #ccc;
+  color: #fff;
+  cursor: pointer;
+  background: #43affc;
+  transition: 0.3s ease;
+}
+
 .input-part button:hover {
+  background: #1d9ffc;
+}
+
+.weather-part button:hover {
   background: #1d9ffc;
 }
 
@@ -146,6 +162,14 @@ header i {
   align-items: center;
   justify-content: center;
   flex-direction: column;
+}
+
+.funfact-part { 
+  display: none;
+}
+
+.showWear-part { 
+  display: none;
 }
 
 .wrapper.active .weather-part {
@@ -240,5 +264,139 @@ header i {
 .humidity i {
   font-size: 1.5rem;
 }
+
+/* Custom styling for the select dropdown */
+.custom-select {
+  position: relative;
+  display: inline-block;
+  padding: 0 1rem;
+  width: 100%;
+  margin: 5%;
+}
+
+.custom-select select {
+  font-size: 1.2rem;
+  text-align: center;
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  padding: 8px 15px;
+  font-size: 16px;
+  color: grey;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  background-color: #fff;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+  outline: none;
+  transition: border-color 0.3s ease-in-out;
+  width: 100%;
+}
+
+.custom-select select:focus {
+  border: 2px solid #43affc;
+  color: black;
+}
+
+/* Styling for the dropdown arrow */
+.custom-select select::after {
+  content: "\25BC"; /* Unicode for the down arrow character */
+  font-size: 16px;
+  color: #6c63ff;
+  padding: 0 10px;
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+/* Hide the default dropdown arrow in Firefox */
+/* Note: This may not work in all versions of Firefox */
+@-moz-document url-prefix() {
+  .custom-select select {
+    background-image: none;
+    padding-right: 30px;
+  }
+}
+
+/* ... (previous CSS) */
+
+/* Custom styling for the select dropdown */
+.custom-select {
+  position: relative;
+  display: inline-block;
+  margin-top: 15px;
+}
+
+.custom-select select {
+  font-size: 1.2rem;
+  text-align: center;
+  appearance: none; /* Remove default styling */
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  padding: 8px 15px;
+  font-size: 16px;
+  color: grey;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  background-color: #fff;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+  outline: none;
+  transition: border-color 0.3s ease-in-out;
+}
+
+.custom-select select:focus {
+  border: 2px solid #43affc;
+  color: black;
+}
+
+/* Styling for the dropdown arrow */
+.custom-select::after {
+  content: "\25BC"; /* Unicode for the down arrow character */
+  font-size: 16px;
+  color: #6c63ff;
+  padding: 0 10px;
+  position: absolute;
+  top: 50%;
+  right: 10px;
+  transform: translateY(-50%);
+}
+
+/* Hide the default dropdown arrow in Firefox */
+/* Note: This may not work in all versions of Firefox */
+@-moz-document url-prefix() {
+  .custom-select select {
+    background-image: none;
+    padding-right: 30px;
+  }
+}
+
+
+/* ... (previous CSS) */
+
+/* Cool styles for the "Go Back" button */
+.weather-part header {
+  display: flex;
+  font-size: 2rem;
+  font-weight: 500;
+  color: #43affc;
+  padding: 1rem;
+  align-items: center;
+  border-bottom: 1px solid #ccc;
+  cursor: pointer;
+}
+
+.weather-part header i {
+  font-size: 1.5rem;
+  margin-right: 10px;
+}
+
+.weather-part header:hover {
+  background-color: #f2f2f2;
+}
+
+/* ... (remaining CSS) */
+
 
 

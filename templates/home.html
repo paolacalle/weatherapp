@@ -7,44 +7,57 @@
       <header>Enter info:</header>
       <p class="info-txt"></p>
       <div class="content">
+        <br>
         <input type="text" spellcheck="false" placeholder="Enter city name" required>
+        <br>
+        <div class="custom-select">
+            <select id="degree_sel" required>
+                <option value="" selected disabled>Select Temperature Unit</option>
+                <option value="freg">Fahrenheit</option>
+                <option value="cel">Celsius</option>
+            </select>
+        </div>
+
         <div class="separator"></div>
         <button>Get Location Automatically</button>
+
       </div>
     </section>
+
     <section class="weather-part">
-      <header><i class='bx bx-left-arrow-alt'></i>Go Back</header>
+      <header>
+        <i class='bx bx-left-arrow-alt' id="showWeatherBtn"></i> <!-- Add the id here -->
+        Go Back
+      </header>
+
       <img src="" alt="Weather Icon">
-      <div class="temp">
-        <span class="numb-c">_</span>
-        <span class="deg">°</span>C 
-      </div>
 
       <div class="temp">
-        <span class="numb-f">_</span>
-        <span class="deg">°</span>F
+        <span class="numb">_</span>
+        <span class="deg">_</span>
       </div>
 
       <div class="weather">_ _</div>
+
       <div class="location">
         <i class='bx bx-map'></i>
         <span>_, _</span>
       </div>
+
       <div class="bottom-details">
         <div class="column feels">
           <i class='bx bxs-thermometer'></i>
           <div class="details">
+
             <div class="temp">
-              <span class="numb-2-c">_</span>
-              <span class="deg">°</span>C
+              <span class="numb-2">_</span>
+              <span class="deg-2">_</span>
             </div>
-            <div class="temp">
-              <span class="numb-2-f">_</span>
-              <span class="deg">°</span>F
-            </div>
+
             <p>Feels like</p>
           </div>
         </div>
+
         <div class="column humidity">
           <i class='bx bxs-droplet-half'></i>
           <div class="details">
@@ -52,112 +65,185 @@
             <p>Humidity</p>
           </div>
         </div>
+
       </div>
+
+      <button id="showFunFactBtn">Generate Fun Fact?</button>
+      <button id="showWearBtn">What to wear?</button>
+
     </section>
+
+    <section class="funfact-part">
+      <header>Fun Fact:</header>
+      <p class="fun-fact-info"></p>
+    </section>
+
+    <section class="showWear-part">
+      <header>We recommend you wear:</header>
+      <p class="wear-info"></p>
+    </section>
+
+
   </div>
     
-    <script> 
-        const wrapper = document.querySelector(".wrapper"),
-        inputPart = document.querySelector(".input-part"),
-        infoTxt = inputPart.querySelector(".info-txt"),
-        inputField = inputPart.querySelector("input"),
-        locationBtn = inputPart.querySelector("button"),
-        weatherPart = wrapper.querySelector(".weather-part"),
-        wIcon = weatherPart.querySelector("img"),
-        arrowBack = wrapper.querySelector("header i");
+<script> 
+    const wrapper = document.querySelector(".wrapper"),
+    inputPart = document.querySelector(".input-part"),
+    infoTxt = inputPart.querySelector(".info-txt"),
+    inputField = inputPart.querySelector("input"),
+    locationBtn = inputPart.querySelector("button"),
+    weatherPart = wrapper.querySelector(".weather-part"),
+    wIcon = weatherPart.querySelector("img"),
+    arrowBack = wrapper.querySelector("header i");
 
-        let api;
+    const funFacts = [
+      "The coldest temperature ever recorded on Earth was -128.6°F in Antarctica.",
+      "Lightning strikes around the world about 100 times per second.",
+      "Raindrops are not actually tear-shaped; they are spherical.",
+      "The hottest temperature ever recorded on Earth was 134°F in Death Valley, California.",
+      "A rainbow can only occur when it is raining in one part of the sky and sunny in another.",
+      "The air at the summit of Mount Everest is too thin to breathe without supplemental oxygen."
+    ];
 
-        inputField.addEventListener("keyup", e =>{
-            if(e.key == "Enter" && inputField.value != ""){
-                requestApi(inputField.value);
-            }
+
+    const clothingRecommendations = {
+      "clear sky": "Wear light clothing and sunglasses.",
+      "cloudy": "A light jacket or sweater might be needed.",
+      "rain": "Carry an umbrella and wear a raincoat or waterproof jacket.",
+      "thunderstorm": "Stay indoors and avoid getting wet.",
+      "snow": "Wear warm layers, a coat, gloves, and a hat.",
+      "mist": "A light jacket or coat may be needed.",
+      "smoke": "Stay indoors and avoid outdoor activities.",
+      "haze": "Consider wearing a mask for protection.",
+      "dust": "Wear a mask and protective clothing if necessary."
+    };
+
+    
+    const funFactContainer = document.querySelector(".funfact-part");
+    const funFactInfo = funFactContainer.querySelector(".fun-fact-info");
+
+    const wearPartContainer = document.querySelector(".showWear-part");
+    const wearInfo = wearPartContainer.querySelector(".wear-info");
+
+    temp_deg_i = 0; 
+
+
+    let api;
+
+    inputField.addEventListener("keyup", e =>{
+        if(e.key == "Enter" && inputField.value != ""){
+            requestApi(inputField.value);
+        }
+    });
+
+
+    locationBtn.addEventListener("click", () =>{
+      if(navigator.geolocation){
+          navigator.geolocation.getCurrentPosition(onSuccess, onError);
+      }else{
+          alert("Sorry, your browser does not allow geolocation api.");
+      }
+    });
+
+    function requestApi(city){
+        api = `https://api.openweathermap.org/data/2.5/weather?q=${city}&units=imperial&appid=12d7632e8289198b000b09b0ec1e303e`;
+        fetchData();
+    }
+
+    function onSuccess(position){
+        const {latitude, longitude} = position.coords;
+        api = `https://api.openweathermap.org/data/2.5/weather?lat=${latitude}&lon=${longitude}&units=imperial&appid=12d7632e8289198b000b09b0ec1e303e`;
+        fetchData();
+    }
+
+    function onError(error){
+        infoTxt.innerText = error.message;
+        infoTxt.classList.add("error");
+    }
+
+    function fetchData(){
+        infoTxt.innerText = "Getting weather details...";
+        infoTxt.classList.add("pending");
+        fetch(api).then(res => res.json()).then(result => weatherDetails(result)).catch(() =>{
+            infoTxt.innerText = "Something went wrong";
+            infoTxt.classList.replace("pending", "error");
         });
+    }
 
-        locationBtn.addEventListener("click", () =>{
-            if(navigator.geolocation){
-                navigator.geolocation.getCurrentPosition(onSuccess, onError);
-            }else{
-                alert("Sorry, your browser does not allow geolocation api.");
+
+    document.getElementById("showFunFactBtn").addEventListener("click", () => {
+      const randomIndex = Math.floor(Math.random() * funFacts.length);
+      const randomFunFact = funFacts[randomIndex];
+      funFactInfo.innerText = randomFunFact;
+      funFactContainer.style.display = "block";
+    });
+
+    document.getElementById("showWearBtn").addEventListener("click", () => {
+      const weatherCondition = weatherPart.querySelector(".weather").innerText;
+      window.alert(weatherPart.querySelector(".weather").innerText);
+      const recommendation = clothingRecommendations[weatherCondition];
+      if (recommendation) {
+        wearInfo.innerText = recommendation;
+      } else {
+        wearInfo.innerText = "No specific recommendation available.";
+      }
+      wearPartContainer.style.display = "block";
+    });
+
+
+    function weatherDetails(info){
+        if(info.cod == "404"){
+            infoTxt.classList.replace("pending", "error");
+            infoTxt.innerText = `${inputField.value} isn't a valid city name`;
+        }else{
+
+            const city = info.name;
+            const country = info.sys.country;
+            const {description, id} = info.weather[0];
+            const {temp, feels_like, humidity} = info.main;
+            
+            if(id == 800){
+                wIcon.src = "https://github.com/paolacalle/weatherapp/assets/98432607/f5980f75-20b4-4302-a042-af674f7b3313";
+            }else if(id >= 200 && id <= 232){
+                wIcon.src = "https://github.com/paolacalle/weatherapp/assets/98432607/c5393283-c50c-44e8-b29b-afdb5b8632ad";  
+            }else if(id >= 600 && id <= 622){
+                wIcon.src = "https://github.com/paolacalle/weatherapp/assets/98432607/334fbf9b-94cd-4312-9de5-2bdda79bad36";
+            }else if(id >= 701 && id <= 781){
+                wIcon.src = "https://github.com/paolacalle/weatherapp/assets/98432607/f954321e-5f83-41a3-9f99-4e6a559298de";
+            }else if(id >= 801 && id <= 804){
+                wIcon.src = "https://github.com/paolacalle/weatherapp/assets/98432607/08da106b-a4bf-4068-a2b3-65c5bcd2eb32";
+            }else if((id >= 500 && id <= 531) || (id >= 300 && id <= 321)){
+                wIcon.src = "https://github.com/paolacalle/weatherapp/assets/98432607/c7f94464-dca3-4a26-b60a-910928f40bf2";
             }
-        });
-
-        function requestApi(city){
-            api = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=12d7632e8289198b000b09b0ec1e303e`;
-            fetchData();
-        }
-
-        function onSuccess(position){
-            const {latitude, longitude} = position.coords;
-            api = `https://api.openweathermap.org/data/2.5/weather?lat=${latitude}&lon=${longitude}&units=metric&appid=12d7632e8289198b000b09b0ec1e303e`;
-            fetchData();
-        }
-
-        function onError(error){
-            infoTxt.innerText = error.message;
-            infoTxt.classList.add("error");
-        }
-
-        function fetchData(){
-            infoTxt.innerText = "Getting weather details...";
-            infoTxt.classList.add("pending");
-            fetch(api).then(res => res.json()).then(result => weatherDetails(result)).catch(() =>{
-                infoTxt.innerText = "Something went wrong";
-                infoTxt.classList.replace("pending", "error");
-            });
-        }
-
-        function weatherDetails(info){
-            if(info.cod == "404"){
-                infoTxt.classList.replace("pending", "error");
-                infoTxt.innerText = `${inputField.value} isn't a valid city name`;
-            }else{
-                const city = info.name;
-                const country = info.sys.country;
-                const {description, id} = info.weather[0];
-                const {temp, feels_like, humidity} = info.main;
-
-
-                if(id == 800){
-                    wIcon.src = "https://github.com/paolacalle/weatherapp/assets/98432607/f5980f75-20b4-4302-a042-af674f7b3313";
-                }else if(id >= 200 && id <= 232){
-                    wIcon.src = "https://github.com/paolacalle/weatherapp/assets/98432607/c5393283-c50c-44e8-b29b-afdb5b8632ad";  
-                }else if(id >= 600 && id <= 622){
-                    wIcon.src = "https://github.com/paolacalle/weatherapp/assets/98432607/334fbf9b-94cd-4312-9de5-2bdda79bad36";
-                }else if(id >= 701 && id <= 781){
-                    wIcon.src = "https://github.com/paolacalle/weatherapp/assets/98432607/f954321e-5f83-41a3-9f99-4e6a559298de";
-                }else if(id >= 801 && id <= 804){
-                    wIcon.src = "https://github.com/paolacalle/weatherapp/assets/98432607/08da106b-a4bf-4068-a2b3-65c5bcd2eb32";
-                }else if((id >= 500 && id <= 531) || (id >= 300 && id <= 321)){
-                    wIcon.src = "https://github.com/paolacalle/weatherapp/assets/98432607/c7f94464-dca3-4a26-b60a-910928f40bf2";
-                }
-                
-                if (temp >= 140) {
-                  weatherPart.querySelector(".temp .numb-c").innerText = Math.floor(temp - 273.15);
-                  weatherPart.querySelector(".temp .numb-f").innerText = Math.floor(((temp - 273.15) * 9/5) + 32);
-                  weatherPart.querySelector(".temp .numb-2-c").innerText = Math.floor(feels_like - 273.15);
-                  weatherPart.querySelector(".temp .numb-2-f").innerText = Math.floor(((feels_like - 273.15) * 9/5) + 32);
-                } else {
-                  weatherPart.querySelector(".temp .numb-c").innerText = Math.floor(temp);
-                  weatherPart.querySelector(".temp .numb-f").innerText = Math.floor((temp * 9/5) + 32);
-                  weatherPart.querySelector(".temp .numb-2-c").innerText = Math.floor(feels_like);
-                  weatherPart.querySelector(".temp .numb-2-f").innerText = Math.floor((feels_like * 9/5) + 32);
-                }
-
-                weatherPart.querySelector(".weather").innerText = description;
-                weatherPart.querySelector(".location span").innerText = `${city}, ${country}`;
-                weatherPart.querySelector(".humidity span").innerText = `${humidity}%`;
-                infoTxt.classList.remove("pending", "error");
-                infoTxt.innerText = "";
-                inputField.value = "";
-                wrapper.classList.add("active");
+            
+            if(document.querySelector("#degree_sel").selectedIndex == 2){
+              weatherPart.querySelector(".temp .numb").innerText = Math.floor((5/9)*(temp - 32));
+              weatherPart.querySelector(".temp .numb-2").innerText = Math.floor((5/9)*(feels_like - 32));
+              weatherPart.querySelector(".temp .deg").innerText = "°C";
+              weatherPart.querySelector(".temp .deg-2").innerText = "°C";
+            } else{
+              weatherPart.querySelector(".temp .numb").innerText = Math.floor(temp);
+              weatherPart.querySelector(".temp .numb-2").innerText = Math.floor(feels_like);
+              weatherPart.querySelector(".temp .deg").innerText = "°F";
+              weatherPart.querySelector(".temp .deg-2").innerText = "°F";
             }
-        }
 
-        arrowBack.addEventListener("click", ()=>{
-            wrapper.classList.remove("active");
-        });
-    </script>
+            weatherPart.querySelector(".weather").innerText = description;
+            weatherPart.querySelector(".location span").innerText = `${city}, ${country}`;
+            weatherPart.querySelector(".humidity span").innerText = `${humidity}%`;
+            infoTxt.classList.remove("pending", "error");
+            infoTxt.innerText = "";
+            inputField.value = "";
+            wrapper.classList.add("active");
+        }
+    }
+
+    arrowBack.addEventListener("click", ()=>{
+      funFactContainer.style.display = "none";
+      wearPartContainer.style.display = "none";
+      wrapper.classList.remove("active");
+    });
+</script>
 
 
 {% endblock content %}
