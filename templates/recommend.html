@@ -1,0 +1,13 @@
+{% extends "layout.html" %} <!-- Inherits the basic layout from layout.html -->
+{% block content %}
+<div class="wrapper center">
+    <section class="input-part">
+        <header>Enter desired temperature:</header>
+        <form action="/recommend" method="get">
+        <input type="number" name="temperature" placeholder="Enter desired temperature" required>
+        <button type="submit">Get City Recommendations</button>
+        </form>
+    </section>
+</div>
+
+{% endblock content %}
