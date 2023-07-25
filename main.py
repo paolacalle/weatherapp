@@ -87,14 +87,18 @@ def register():
         username = form.username.data
         email = form.email.data
         password = form.password.data
-        hashed_password = hash_password(password)
-        cursor.execute(insert_query, (username, email, hashed_password))
-        connection.commit()
-        # Close the connection
-        connection.close()
+        # Check if the password is at least 4 characters long
+        if len(password) < 4:
+            flash('Error: Password must be at least 4 characters long.')
+        else:
+            hashed_password = hash_password(password)
+            cursor.execute(insert_query, (username, email, hashed_password))
+            connection.commit()
+            # Close the connection
+            connection.close()
 
-        flash(f'Account created for {form.username.data}!', 'success')
-        return redirect(url_for('home')) # if so - send to home page
+            flash(f'Account created for {form.username.data}!', 'success')
+            return redirect(url_for('home')) # if so - send to home page
     return render_template('register.html', title='Register', form=form)
 
 @app.route("/login", methods=['GET', 'POST'])
