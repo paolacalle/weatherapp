@@ -1,29 +1,16 @@
 {% extends "layout.html" %} <!-- Inherits the basic layout from layout.html -->
 {% block content %}
 
-
   <div class="wrapper center">
     <section class="input-part">
-      <header>Enter info:</header>
-      <p class="info-txt"></p>
-      <div class="content">
-        <br>
-        <input type="text" spellcheck="false" placeholder="Enter city name" required>
-        <br>
-        <div class="custom-select">
-            <select id="degree_sel" required>
-                <option value="" selected disabled>Select Temperature Unit</option>
-                <option value="freg">Fahrenheit</option>
-                <option value="cel">Celsius</option>
-            </select>
-        </div>
-
-        <div class="separator"></div>
-        <button>Get Location Automatically</button>
-
-      </div>
+      <header>Enter desired temperature:</header>
+      <form action="/recommend" method="get">
+        <input type="number" name="temperature" placeholder="Enter desired temperature" required>
+        <button type="submit">Get City Recommendations</button>
+      </form>
     </section>
 
+    
     <section class="weather-part">
       <header>
         <i class='bx bx-left-arrow-alt' id="showWeatherBtn"></i> <!-- Add the id here -->
