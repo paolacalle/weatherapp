@@ -4,6 +4,11 @@ from forms import RegistrationForm, loginForm
 from flask_behind_proxy import FlaskBehindProxy
 import sqlite3
 import bcrypt
+import requests
+
+API_KEY = '297665b94cba0bb5002c9d0fb571cecc'
+TEMPERATURE_THRESHOLD = 5  # Cities within this range of the desired temperature will be recommended
+
 
 connection = sqlite3.connect('database.db')
 cursor = connection.cursor()
@@ -32,6 +37,27 @@ def home():
     #corresponding template .html file and 
     #pass the missing info 
     return render_template('home.html', subtitle='Welcome to Weather App.', text='This is the home page')
+
+@app.route("/recommend", methods=['GET'])
+def recommend():
+    temperature = float(request.args.get('temperature', 20))  # Default to 20C if no temperature provided
+
+    # List of cities to check weather
+    cities = ['New York', 'Los Angeles', 'Chicago', 'Houston', 'Philadelphia']  # Replace with your list of cities
+
+    recommended_cities = []
+    for city in cities:
+        # Get the current weather for the city
+        response = requests.get(f'http://api.openweathermap.org/data/2.5/weather?q={city}&appid={API_KEY}&units=metric')
+        data = response.json()
+
+        # If the city's temperature is within the desired range, add it to the list of recommended cities
+        city_temp = data['main']['temp']
+        if abs(city_temp - temperature) <= TEMPERATURE_THRESHOLD:
+            recommended_cities.append(city)
+
+    return render_template('recommend.html', temperature=temperature, cities=recommended_cities)
+
 
 @app.route("/register", methods=['GET', 'POST'])
 def register():
