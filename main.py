@@ -88,6 +88,8 @@ def register():
         email = form.email.data
         password = form.password.data
         # Check if the password is at least 4 characters long
+        if len(username) < 4:
+            flash('Error: Username must be at least 4 characters long.')
         if len(password) < 4:
             flash('Error: Password must be at least 4 characters long.')
         else:
