@@ -269,9 +269,9 @@ header i {
 .custom-select {
   position: relative;
   display: inline-block;
-  padding: 0 1rem;
+  padding: 10 1rem;
   width: 100%;
-  margin: 5%;
+  /* margin: 5%; */
 }
 
 .custom-select select {
@@ -397,6 +397,16 @@ header i {
 }
 
 /* ... (remaining CSS) */
+.sidebar {
+  position: fixed;
+  top: 50%;
+  right: 10px;
+  transform: translateY(-50%);
+  z-index: 100;
+  background-color: white;
+  padding: 4%;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
 
 
 

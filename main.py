@@ -1,10 +1,11 @@
 import git
-from flask import Flask, render_template, url_for, flash, redirect, request
+from flask import Flask, render_template, url_for, flash, redirect, request, session
 from forms import RegistrationForm, loginForm
 from flask_behind_proxy import FlaskBehindProxy
 import sqlite3
 import bcrypt
 import requests
+import re
 
 API_KEY = '297665b94cba0bb5002c9d0fb571cecc'
 TEMPERATURE_THRESHOLD = 5  # Cities within this range of the desired temperature will be recommended
@@ -38,38 +39,25 @@ def home():
     #pass the missing info 
     return render_template('home.html', subtitle='Welcome to Weather App.', text='This is the home page')
 
-@app.route("/recommend", methods=['GET', 'POST'])
+@app.route("/recommend", methods=['GET'])
 def recommend():
-    if request.method == 'POST':
-        state = request.form['state']
-        desired_temp = float(request.form['temperature'])
+    temperature = float(request.args.get('temperature', 20))  # Default to 20C if no temperature provided
 
-        cities = {
-            'New York': ['New York', 'Buffalo', 'Rochester'],
-            'California': ['Los Angeles', 'San Francisco', 'San Diego'],
-            'Texas': ['Houston', 'Dallas', 'Austin']
-            # add more states and cities as needed
-        }
+    # List of cities to check weather
+    cities = ['New York', 'Los Angeles', 'Chicago', 'Houston', 'Philadelphia']  # Replace with your list of cities
 
-        closest_city = None
-        closest_temp_diff = float('inf')
+    recommended_cities = []
+    for city in cities:
+        # Get the current weather for the city
+        response = requests.get(f'http://api.openweathermap.org/data/2.5/weather?q={city}&appid={API_KEY}&units=metric')
+        data = response.json()
 
-        for city in cities.get(state, []):
-            weather = requests.get(f'http://api.openweathermap.org/data/2.5/weather?q={city}&appid=12d7632e8289198b000b09b0ec1e303e&units=imperial')
-            data = weather.json()
-            city_temp = data['main']['temp']
+        # If the city's temperature is within the desired range, add it to the list of recommended cities
+        city_temp = data['main']['temp']
+        if abs(city_temp - temperature) <= TEMPERATURE_THRESHOLD:
+            recommended_cities.append(city)
 
-            temp_diff = abs(city_temp - desired_temp)
-
-            if temp_diff < closest_temp_diff:
-                closest_temp_diff = temp_diff
-                closest_city = city
-
-        return render_template('recommend.html', temperature=desired_temp, cities=closest_city)
-
-    
-    return render_template('recommend.html')
-
+    return render_template('recommend.html', temperature=temperature, cities=recommended_cities)
 
 
 @app.route("/register", methods=['GET', 'POST'])
@@ -102,9 +90,18 @@ def register():
         password = form.password.data
         # Check if the password is at least 4 characters long
         if len(username) < 4:
-            flash('Error: Username must be at least 4 characters long.')
-        if len(password) < 4:
-            flash('Error: Password must be at least 4 characters long.')
+            flash('Error: Username must be at least 4 characters long.', 'danger')
+        if len(password) < 12:
+            flash('Error: Password must be at least 12 characters long.', 'danger')
+
+        elif not len(re.findall(r"[A-Z]", password)) >= 4:
+            flash('Error: Password must have at least 4 upper letter.', 'danger')
+        elif not len(re.findall(r"[a-z]", password)) >= 4:
+            flash('Error: Password must have at least 4 lower letter.', 'danger')
+        elif not len(re.findall(r"\d", password)) >= 3:
+            flash('Error: Password must have at least 3 number.', 'danger')
+        elif not re.search(r"[!@#$%^&*(),.?\":{}|<>]", password):
+            flash('Error: Password must have at least one special character: !@#$%^&*(),.?\":}{|<>.', 'danger')
         else:
             hashed_password = hash_password(password)
             cursor.execute(insert_query, (username, email, hashed_password))
@@ -130,13 +127,21 @@ def login():
         cursor.execute(select_query, (form.username.data,))
         user = cursor.fetchone()
 
+        if user is None: 
+            flash('Invalid username.', 'danger')
+            connection.close()
+            return redirect(url_for('login'))
         # Check if a user with the provided username exists and if the password matches
         login_password = form.password.data
         hashed_password = user[3]
+        
         if user and verify_password(hashed_password, login_password):  # Assuming password is stored in the fourth column (index 3)
             flash('Login successful!', 'success')
             connection.close()
-            return redirect(url_for('home'))
+
+            session['username'] = user[1] 
+
+            return redirect(url_for('user_dashboard', username=user[1]))
 
         flash('Invalid username or password. Please try again.', 'danger')
         connection.close()
@@ -152,6 +157,25 @@ def hash_password(password):
 def verify_password(hashed_password, password):
     # Verify the entered password against the stored hash
     return bcrypt.checkpw(password.encode('utf-8'), hashed_password.encode('utf-8'))
+
+@app.route("/user_dashboard/<username>")
+def user_dashboard(username):
+    # You can retrieve user-specific data here based on the provided 'username'
+    # For example, you can query the database to get user-specific information
+
+    # Example: Retrieving user-specific data from the database
+    connection = sqlite3.connect('database.db')
+    cursor = connection.cursor()
+
+    select_query = '''
+        SELECT * FROM users WHERE username=?
+    '''
+    cursor.execute(select_query, (username,))
+    user = cursor.fetchone()
+
+    connection.close()
+
+    return render_template('user_dashboard.html', title='User Dashboard', user=user)
 
 if __name__ == '__main__':
     app.run(debug=True, host="0.0.0.0")
