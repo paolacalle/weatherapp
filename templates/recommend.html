@@ -34,5 +34,23 @@
       {% endif %}
     </div>
   </section>
-  
+
+<script type="text/javascript">
+  function getState() {
+    navigator.geolocation.getCurrentPosition(function(position) {
+      const lat = position.coords.latitude;
+      const lon = position.coords.longitude;
+      
+      // Send a GET request to the geocode endpoint with the latitude and longitude
+      fetch(`/geocode?lat=${lat}&lon=${lon}`)
+        .then(response => response.json())
+        .then(data => {
+          // Get the state name from the response and fill the form
+          const state = data.state;
+          document.getElementById('inputState').value = state;
+        });
+    });
+  }
+</script>
+
 {% endblock content %}
