@@ -46,7 +46,7 @@ def recommend():
         cities = {
             'New York': ['New York', 'Buffalo', 'Rochester', 'Albany'],
             'California': ['Los Angeles', 'San Francisco', 'San Diego', 'Pasadena'],
-            'Texas': ['Houston', 'Dallas', 'Austin', 'Fort Worth']
+            'Texas': ['Houston', 'Dallas', 'Austin', 'Fort Worth'],
             'Washington': ['Seattle', 'Tacoma', 'Bellevue', 'Olympia']
             # add more states and cities as needed
         }
