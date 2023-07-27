@@ -44,10 +44,10 @@ def recommend():
         desired_temp = float(request.form['temperature'])
 
         cities = {
-            'New York': ['New York', 'Buffalo', 'Rochester'],
-            'California': ['Los Angeles', 'San Francisco', 'San Diego'],
-            'Texas': ['Houston', 'Dallas', 'Austin']
-            'Washington': ['Seattle', 'Tacoma', 'Bellevue']
+            'New York': ['New York', 'Buffalo', 'Rochester', 'Albany'],
+            'California': ['Los Angeles', 'San Francisco', 'San Diego', 'Pasadena'],
+            'Texas': ['Houston', 'Dallas', 'Austin', 'Fort Worth']
+            'Washington': ['Seattle', 'Tacoma', 'Bellevue', 'Olympia']
             # add more states and cities as needed
         }
 
