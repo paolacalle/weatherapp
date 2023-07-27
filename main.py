@@ -36,6 +36,7 @@ def home():
     #pass the missing info 
     return render_template('home.html', subtitle='Welcome to Weather App.', text='This is the home page')
 
+@app.route("/recommend", methods=['GET', 'POST'])
 def recommend():
     if request.method == 'POST':
         state = request.form['state']
@@ -62,14 +63,11 @@ def recommend():
                 closest_temp_diff = temp_diff
                 closest_city = city
 
-        if closest_city:
-            message = f"The city with temperature closest to your desired temperature is: {closest_city}"
-        else:
-            message = "Sorry, we couldn't find a city matching your criteria."
-        return render_template('recommend.html', temperature=desired_temp if request.method == 'POST' else None, message=message)
+        message = f"The city with the closest temperature to {desired_temp} is {closest_city}." if closest_city else "No city found that matches the criteria."
+        return render_template('recommend.html', message=message, temperature=desired_temp if request.method == 'POST' else None)
 
     return render_template('recommend.html')
- 
+
 
 
 
