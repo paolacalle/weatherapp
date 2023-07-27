@@ -1,5 +1,5 @@
 import git
-from flask import Flask, render_template, url_for, flash, redirect, request, session
+from flask import Flask, jsonify, render_template, url_for, flash, redirect, request, session
 from forms import RegistrationForm, loginForm
 from flask_behind_proxy import FlaskBehindProxy
 import sqlite3
@@ -69,7 +69,27 @@ def recommend():
 
     return render_template('recommend.html')
 
+@app.route('/geocode')
+def geocode():
+    lat = request.args.get('lat', type=float)
+    lon = request.args.get('lon', type=float)
 
+    # Get the API key for OpenCage Geocoder
+    api_key = 'YOUR_API_KEY' # replace 'YOUR_API_KEY' with your actual API key
+
+    # Construct the API URL
+    url = f"https://api.opencagedata.com/geocode/v1/json?q={lat}+{lon}&key={api_key}"
+
+    # Send a GET request to the API and get the response
+    response = requests.get(url)
+
+    # Convert the response to JSON
+    data = response.json()
+
+    # Get the state name from the 'components' part of the response
+    state = data['results'][0]['components'].get('state', '')
+
+    return jsonify(state=state)
 
 
 
