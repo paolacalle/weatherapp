@@ -1,13 +1,26 @@
 {% extends "layout.html" %} <!-- Inherits the basic layout from layout.html -->
 {% block content %}
-<div class="wrapper center">
+
+  <div class="wrapper center">
     <section class="input-part">
-        <header>Enter desired temperature:</header>
-        <form action="/recommend" method="get">
-        <input type="number" name="temperature" placeholder="Enter desired temperature" required>
-        <button type="submit">Get City Recommendations</button>
+      <header>Enter info:</header>
+      <p class="info-txt"></p>
+      <div class="content">
+        <form action="/recommend" method="post"> <!-- Add the form here -->
+          <input type="text" name="state" spellcheck="false" placeholder="Enter state name" required>
+          <br>
+          <input type="text" name="temperature" spellcheck="false" placeholder="Enter desired temperature" required>
+          <br>
+          <button type="submit">Submit</button>
         </form>
+
+        <div class="separator"></div>
+        <button>Get Location Automatically</button>
+
+      </div>
     </section>
-</div>
+
+    <!-- Rest of the HTML code is the same -->
+    <!-- .... -->
 
 {% endblock content %}
