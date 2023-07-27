@@ -9,17 +9,16 @@
       <!-- Display form and submit button only if no city has been found -->
       {% if not message.city %}
         <form action="/recommend" method="post"> <!-- Add the form here -->
-          <input type="text" id="state" name="state" spellcheck="false" placeholder="Enter state name" required>
+          <input type="text" id="inputState" name="state" spellcheck="false" placeholder="Enter state name" required>
           <br>
           <input type="text" name="temperature" spellcheck="false" placeholder="Enter desired temperature" required>
           <br>
-          <button type="submit">Submit</button>
+          <button type="submit" id="submitButton">Submit</button>
         </form>
 
         <div class="separator"></div>
 
-        <button type="button" onclick="getState()">Get State Automatically</button>
-        <input type="text" id="state" name="state" spellcheck="false" placeholder="Enter state name" required>
+        <button type="button" id="getStateButton" onclick="getState()">Get State Automatically</button>
       {% endif %}
 
       <!-- Display city and temperature -->
