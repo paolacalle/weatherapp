@@ -65,10 +65,16 @@ def recommend():
                 closest_temp_diff = temp_diff
                 closest_city = city
 
-        message = f"The city with the closest temperature to {desired_temp} is {closest_city}." if closest_city else "No city found that matches the criteria."
+        text = f"The city with the closest temperature to {desired_temp} is {closest_city}." if closest_city else "No city found that matches the criteria."
+
+        message = {
+            'text': text,
+            'city': closest_city
+        }
         return render_template('recommend.html', message=message, temperature=desired_temp if request.method == 'POST' else None)
 
-    return render_template('recommend.html')
+    return render_template('recommend.html', message={'text': '', 'city': ''})
+
 
 @app.route('/geocode')
 def geocode():
