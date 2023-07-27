@@ -18,14 +18,12 @@
       <button>Get Location Automatically</button>
       
       <!-- Display city and temperature -->
-      {% if city and temperature %}
+      {% if message %}
         <div class="result">
-          <p>The city with the closest temperature to {{ temperature }} is {{ city }}.</p>
+          <p>{{ message }}</p>
         </div>
       {% endif %}
     </div>
   </section>
-
-
-
+  
 {% endblock content %}
