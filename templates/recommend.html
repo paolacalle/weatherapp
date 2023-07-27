@@ -16,7 +16,29 @@
 
       <div class="separator"></div>
       <button>Get Location Automatically</button>
-      
+      <button type="button" onclick="getState()">Get State Automatically</button>
+<input type="text" id="state" name="state" spellcheck="false" placeholder="Enter state name" required>
+<script>
+function getState() {
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(showPosition);
+    } else { 
+        alert("Geolocation is not supported by this browser.");
+    }
+}
+
+function showPosition(position) {
+    var lat = position.coords.latitude;
+    var lon = position.coords.longitude;
+
+    fetch(`/geocode?lat=${lat}&lon=${lon}`)
+    .then(response => response.json())
+    .then(data => {
+        document.getElementById('state').value = data.state;
+    });
+}
+</script>
+
       <!-- Display city and temperature -->
       {% if message %}
         <div class="result" style="text-align: center;">
