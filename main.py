@@ -67,7 +67,7 @@ def recommend():
 
         return render_template('recommend.html', temperature=desired_temp, cities=closest_city)
 
-    # assuming that you have a form on 'recommend.html' that posts to this route
+    
     return render_template('recommend.html')
 
 
