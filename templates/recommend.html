@@ -6,43 +6,31 @@
     <header>Enter info:</header>
     <p class="info-txt"></p>
     <div class="content">
-      <form action="/recommend" method="post"> <!-- Add the form here -->
+      <!-- Display form and submit button only if no city has been found -->
+      {% if not message.city %}
+        <form action="/recommend" method="post"> <!-- Add the form here -->
+          <input type="text" id="state" name="state" spellcheck="false" placeholder="Enter state name" required>
+          <br>
+          <input type="text" name="temperature" spellcheck="false" placeholder="Enter desired temperature" required>
+          <br>
+          <button type="submit">Submit</button>
+        </form>
+
+        <div class="separator"></div>
+
+        <button type="button" onclick="getState()">Get State Automatically</button>
         <input type="text" id="state" name="state" spellcheck="false" placeholder="Enter state name" required>
-        <br>
-        <input type="text" name="temperature" spellcheck="false" placeholder="Enter desired temperature" required>
-        <br>
-        <button type="submit">Submit</button>
-      </form>
-
-      <div class="separator"></div>
-    
-      <button type="button" onclick="getState()">Get State Automatically</button>
-
-<script>
-function getState() {
-    if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(showPosition);
-    } else { 
-        alert("Geolocation is not supported by this browser.");
-    }
-}
-
-function showPosition(position) {
-    var lat = position.coords.latitude;
-    var lon = position.coords.longitude;
-
-    fetch(`/geocode?lat=${lat}&lon=${lon}`)
-    .then(response => response.json())
-    .then(data => {
-        document.getElementById('state').value = data.state;
-    });
-}
-</script>
+      {% endif %}
 
       <!-- Display city and temperature -->
-      {% if message %}
+      {% if message.text %}
         <div class="result" style="text-align: center;">
-          <p>{{ message }}</p>
+          <p>{{ message.text }}</p>
+          {% if message.city %}
+            <a href="https://www.google.com/maps/dir/{{ message.city }}" target="_blank">
+              <button type="button">Let's Go</button>
+            </a>
+          {% endif %}
         </div>
       {% endif %}
     </div>
