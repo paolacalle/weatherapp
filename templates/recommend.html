@@ -7,37 +7,34 @@
     <p class="info-txt"></p>
     <div class="content">
       <form action="/recommend" method="post"> <!-- Add the form here -->
-        <input type="text" name="state" spellcheck="false" placeholder="Enter state name" required>
+        <input type="text" id="state" name="state" spellcheck="false" placeholder="Enter state name" required>
+        <button type="button" onclick="getState()">Get State Automatically</button>
         <br>
         <input type="text" name="temperature" spellcheck="false" placeholder="Enter desired temperature" required>
         <br>
         <button type="submit">Submit</button>
       </form>
 
-      <div class="separator"></div>
-      <button>Get Location Automatically</button>
-      <button type="button" onclick="getState()">Get State Automatically</button>
-<input type="text" id="state" name="state" spellcheck="false" placeholder="Enter state name" required>
-<script>
-function getState() {
-    if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(showPosition);
-    } else { 
-        alert("Geolocation is not supported by this browser.");
-    }
-}
+      <script>
+        function getState() {
+          if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(showPosition);
+          } else { 
+            alert("Geolocation is not supported by this browser.");
+          }
+        }
 
-function showPosition(position) {
-    var lat = position.coords.latitude;
-    var lon = position.coords.longitude;
+        function showPosition(position) {
+          var lat = position.coords.latitude;
+          var lon = position.coords.longitude;
 
-    fetch(`/geocode?lat=${lat}&lon=${lon}`)
-    .then(response => response.json())
-    .then(data => {
-        document.getElementById('state').value = data.state;
-    });
-}
-</script>
+          fetch(`/geocode?lat=${lat}&lon=${lon}`)
+          .then(response => response.json())
+          .then(data => {
+            document.getElementById('state').value = data.state;
+          });
+        }
+      </script>
 
       <!-- Display city and temperature -->
       {% if message %}
