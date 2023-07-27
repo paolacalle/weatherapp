@@ -68,7 +68,7 @@ def recommend():
         message = "Sorry, we couldn't find a city matching your criteria."
 
     return render_template('recommend.html', temperature=desired_temp if request.method == 'POST' else None, message=message)
-    return render_template('recommend.html')
+ 
 
 
 
