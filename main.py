@@ -75,7 +75,7 @@ def geocode():
     lon = request.args.get('lon', type=float)
 
     # Get the API key for OpenCage Geocoder
-    api_key = 'YOUR_API_KEY' # replace 'YOUR_API_KEY' with your actual API key
+    api_key = 'dce19577913643dca08b2b7d26b06c22' # replace 'YOUR_API_KEY' with your actual API key
 
     # Construct the API URL
     url = f"https://api.opencagedata.com/geocode/v1/json?q={lat}+{lon}&key={api_key}"
