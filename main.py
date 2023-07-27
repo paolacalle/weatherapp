@@ -6,8 +6,6 @@ import sqlite3
 import bcrypt
 import requests
 
-API_KEY = '297665b94cba0bb5002c9d0fb571cecc'
-TEMPERATURE_THRESHOLD = 5  # Cities within this range of the desired temperature will be recommended
 
 
 connection = sqlite3.connect('database.db')
